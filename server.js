@@ -127,9 +127,9 @@ let SF_USER_NAME = process.env.SF_USER_NAME;
 let SF_USER_PASSWORD = process.env.SF_USER_PASSWORD;
 let SF_ENVIRONMENT = process.env.SF_ENVIRONMENT || 'sandbox'; // default to sandbox if env variable not set
 
-console.log('--> SF_USER_NAME : ' + SF_USER_NAME);
-console.log('--> SF_USER_Password : ' + SF_USER_PASSWORD);
-console.log('--> SF_ENVIRONMENT : ' + SF_ENVIRONMENT);
+console.log('• SF_USER_NAME : ' + SF_USER_NAME);
+console.log('• SF_USER_PASSWORD : ' + SF_USER_PASSWORD);
+console.log('• SF_ENVIRONMENT : ' + SF_ENVIRONMENT);
 
 let org = nforce.createConnection({
     clientId: SF_CLIENT_ID,
@@ -147,7 +147,7 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
     } else {
         console.log("Salesforce authentication successful");
         console.log(org.oauth.instance_url);
-        subscribeToPlatformEvents();
+        //subscribeToPlatformEvents();
         // For this demo, we use the id of the first account as the distributor id.
         // Make sure there us at least one account in your Salesforce org.
         let q = "SELECT Id FROM Account LIMIT 1";
