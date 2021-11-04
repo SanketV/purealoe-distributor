@@ -157,9 +157,9 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
             } else {
                 if (resp.records && resp.records.length === 1) {
                     accountId = resp.records[0].get('Id');
-                    console.log(`Account Id: ${accountId}`);
+                    console.log(`• Account Id: ${accountId}`);
                 } else {
-                    console.log('WARNING: You need to create an account in your org');
+                    console.log('• WARNING: You need to create an account in your org');
                 }
             }
         });
