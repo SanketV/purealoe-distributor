@@ -128,7 +128,7 @@ let SF_USER_PASSWORD = process.env.SF_USER_PASSWORD;
 let SF_ENVIRONMENT = process.env.SF_ENVIRONMENT || 'sandbox'; // default to sandbox if env variable not set
 
 console.log('--> SF_USER_NAME : ' + SF_USER_NAME);
-console.log('--> SF_USER_Password : ' + SF_USER_PASSWORD;
+console.log('--> SF_USER_Password : ' + SF_USER_PASSWORD);
 console.log('--> SF_ENVIRONMENT : ' + SF_ENVIRONMENT);
 
 let org = nforce.createConnection({
