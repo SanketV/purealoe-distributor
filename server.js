@@ -67,7 +67,7 @@ let subscribeToPlatformEvents = () => {
     var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
     client.setHeader('Authorization', 'OAuth ' + org.oauth.access_token);
     client.subscribe('/event/Bundle_Submitted__e', function (message) {
-        console.log('#### got Bundle_Submitted__e event');
+        console.log('• got Bundle_Submitted__e event');
         // Send message to all connected Socket.io clients
         io.of('/').emit('bundle_submitted', {
             bundleId: message.payload.Bundle_Id__c,
@@ -121,7 +121,7 @@ bayeux.on('disconnect', function (clientId) {
 
 let PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => console.log(`Express server listening on ${PORT}`));
+server.listen(PORT, () => console.log(`• Express server listening on ${PORT}`));
 
 // Connect to Salesforce
 let SF_CLIENT_ID = process.env.SF_CLIENT_ID;
@@ -148,15 +148,15 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
         console.error("Salesforce authentication error");
         console.error(err);
     } else {
-        console.log("Salesforce authentication successful");
-        console.log(org.oauth.instance_url);
+        console.log("• Salesforce authentication successful");
+        console.log('• ' + org.oauth.instance_url);
         subscribeToPlatformEvents();
         // For this demo, we use the id of the first account as the distributor id.
         // Make sure there us at least one account in your Salesforce org.
         let q = "SELECT Id FROM Account LIMIT 1";
         org.query({ query: q }, (err, resp) => {
             if (err) {
-                console.log(err);
+                console.log('• ' + err);
             } else {
                 if (resp.records && resp.records.length === 1) {
                     accountId = resp.records[0].get('Id');
