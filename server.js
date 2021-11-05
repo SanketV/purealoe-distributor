@@ -61,6 +61,9 @@ let getBundleDetails = (req, res) => {
 
 // Subscribe to Platform Events
 let subscribeToPlatformEvents = () => {
+
+    console.log('• Create faye client and subscribe to CometD. ');
+
     var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
     client.setHeader('Authorization', 'OAuth ' + org.oauth.access_token);
     client.subscribe('/event/Bundle_Submitted__e', function (message) {
@@ -74,14 +77,14 @@ let subscribeToPlatformEvents = () => {
         });
     });
     client.subscribe('/event/Bundle_Unsubmitted__e', function (message) {
-        console.log('### got Bundle_Unsubmitted__e event');
+        console.log('• got Bundle_Unsubmitted__e event');
         // Send message to all connected Socket.io clients
         io.of('/').emit('bundle_unsubmitted', {
             bundleId: message.payload.Bundle_Id__c,
         });
     });
     client.on('transport:down', function () {
-        console.error('# Faye client dowwn');
+        console.error('• Faye client dowwn');
     });
 };
 
