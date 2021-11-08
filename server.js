@@ -64,7 +64,8 @@ let subscribeToPlatformEvents = () => {
 
     console.log('• Create faye client and subscribe to CometD. ');
 
-    var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
+    var client = new Faye.Client(org.oauth.instance_url + '/cometd/42.0/');
+
     client.setHeader('Authorization', 'OAuth ' + org.oauth.access_token);
     client.subscribe('/event/Bundle_Submitted__e', function (message) {
         console.log('• got Bundle_Submitted__e event');
@@ -124,11 +125,11 @@ let PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`• Express server listening on ${PORT}`));
 
 // Connect to Salesforce
-let SF_CLIENT_ID = process.env.SF_CLIENT_ID;
-let SF_CLIENT_SECRET = process.env.SF_CLIENT_SECRET;
-let SF_USER_NAME = process.env.SF_USER_NAME;
-let SF_USER_PASSWORD = process.env.SF_USER_PASSWORD;
-let SF_ENVIRONMENT = process.env.SF_ENVIRONMENT || 'sandbox'; // default to sandbox if env variable not set
+let SF_CLIENT_ID = process.env.SF_CLIENT_ID || '3MVG95jctIhbyCprhYRePXz9v14wzwToLmqEHNsd5K1W4hx7EhpxybQZzbgIvmFZhMtW73G9B9QKKmdz8eVKT';
+let SF_CLIENT_SECRET = process.env.SF_CLIENT_SECRET || '041D2B46B19ABAB5922427A88F0E7ADD722C53DFE5050B8485337EA532145AB6';
+let SF_USER_NAME = process.env.SF_USER_NAME || 'sanket_vaidya@creative-shark-7fn5g9.com';
+let SF_USER_PASSWORD = process.env.SF_USER_PASSWORD || 'Peace#014rrFjLe2FACkxpU0XhSFX9Yc';
+let SF_ENVIRONMENT = process.env.SF_ENVIRONMENT || 'production'; // default to sandbox if env variable not set
 
 console.log('• SF_USER_NAME : ' + SF_USER_NAME);
 console.log('• SF_USER_PASSWORD : ' + SF_USER_PASSWORD);
