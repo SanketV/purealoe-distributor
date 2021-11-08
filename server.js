@@ -91,7 +91,7 @@ let subscribeToPlatformEvents = () => {
     });
 
     } catch (error) {
-            console.error('Method: subscribeToPlatformEvents() - ' + error);  
+            console.error('• Method: subscribeToPlatformEvents() - ' + error);  
     }
 };
 
