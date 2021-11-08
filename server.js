@@ -62,6 +62,8 @@ let getBundleDetails = (req, res) => {
 // Subscribe to Platform Events
 let subscribeToPlatformEvents = () => {
 
+    try {
+    
     console.log('• Create faye client and subscribe to CometD. ');
 
     var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
@@ -85,8 +87,12 @@ let subscribeToPlatformEvents = () => {
         });
     });
     client.on('transport:down', function () {
-        console.error('• Faye client dowwn');
+        console.error('• Faye client down');
     });
+
+    } catch (error) {
+            console.error('Method: subscribeToPlatformEvents() - ' + error);  
+    }
 };
 
 let orderBundle = (req, res) => {
