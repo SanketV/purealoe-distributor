@@ -64,7 +64,7 @@ let subscribeToPlatformEvents = () => {
 
     console.log('• Create faye client and subscribe to CometD. ');
 
-    var client = new Faye.Client(org.oauth.instance_url + '/cometd/42.0/');
+    var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
 
     client.setHeader('Authorization', 'OAuth ' + org.oauth.access_token);
     client.subscribe('/event/Bundle_Submitted__e', function (message) {
@@ -151,7 +151,7 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
     } else {
         console.log("• Salesforce authentication successful");
         console.log('• ' + org.oauth.instance_url);
-        //subscribeToPlatformEvents();
+        subscribeToPlatformEvents();
         // For this demo, we use the id of the first account as the distributor id.
         // Make sure there us at least one account in your Salesforce org.
         let q = "SELECT Id FROM Account LIMIT 1";
