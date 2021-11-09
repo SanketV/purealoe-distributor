@@ -5,6 +5,7 @@ let cors = require('cors');
 let app = express();
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
+var jsforce = require('jsforce');
 // The account id of the distributor
 let accountId;
 
@@ -65,8 +66,9 @@ let subscribeToPlatformEvents = () => {
     try {
     
     console.log('• Create faye client and subscribe to CometD. ');
+    console.log('• Access Token : ' + org.oauth.access_token);
 
-    var client = new faye.Client(org.oauth.instance_url + '/cometd/42.0/');
+    var client = new faye.Client(org.oauth.instance_url + '/cometd/52.0/');
 
     client.setHeader('Authorization', 'OAuth ' + org.oauth.access_token);
     client.subscribe('/event/Bundle_Submitted__e', function (message) {
@@ -79,13 +81,13 @@ let subscribeToPlatformEvents = () => {
             qty: message.payload.Qty__c
         });
     });
-    client.subscribe('/event/Bundle_Unsubmitted__e', function (message) {
+    /*client.subscribe('/event/Bundle_Unsubmitted__e', function (message) {
         console.log('• got Bundle_Unsubmitted__e event');
         // Send message to all connected Socket.io clients
         io.of('/').emit('bundle_unsubmitted', {
             bundleId: message.payload.Bundle_Id__c,
         });
-    });
+    });*/
     client.on('transport:down', function () {
         console.error('• Faye client down');
     });
@@ -93,6 +95,8 @@ let subscribeToPlatformEvents = () => {
     } catch (error) {
             console.error('• Method: subscribeToPlatformEvents() - ' + error);  
     }
+
+    console.log('• faye client - ' + client);
 };
 
 let orderBundle = (req, res) => {
@@ -126,7 +130,7 @@ bayeux.on('disconnect', function (clientId) {
     console.log('Bayeux server disconnect');
 });
 
-let PORT = process.env.PORT || 5000;
+let PORT = process.env.PORT || 1100;
 
 server.listen(PORT, () => console.log(`• Express server listening on ${PORT}`));
 
@@ -140,6 +144,34 @@ let SF_ENVIRONMENT = process.env.SF_ENVIRONMENT || 'production'; // default to s
 console.log('• SF_USER_NAME : ' + SF_USER_NAME);
 console.log('• SF_USER_PASSWORD : ' + SF_USER_PASSWORD);
 console.log('• SF_ENVIRONMENT : ' + SF_ENVIRONMENT);
+
+
+let subscribeToPlatformEvents2 = () => {
+    
+    var username = SF_USER_NAME;
+    var password = SF_USER_PASSWORD;
+    var conn = new jsforce.Connection({
+    });
+    
+    conn.login(username, password, function(err, userInfo) {
+        
+        if (err) { return console.error(err); }
+
+        console.log('• logged in through jsource');
+        
+        conn.streaming.topic("/event/Demo__e").subscribe(function(message) {
+            console.dir(message);
+            console.log(' message ' + message);
+        });
+    });
+
+    /*conn.query("SELECT Id, Name FROM CONTACT", function(err, result) {
+        if (err) { return console.error(err); }
+        console.log("total : " + result.totalSize);
+        console.log("fetched : " + result.records.length);
+      });*/
+}
+
 
 let org = nforce.createConnection({
     clientId: SF_CLIENT_ID,
@@ -157,7 +189,8 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
     } else {
         console.log("• Salesforce authentication successful");
         console.log('• ' + org.oauth.instance_url);
-        subscribeToPlatformEvents();
+        //subscribeToPlatformEvents();
+        //subscribeToPlatformEvents2();
         // For this demo, we use the id of the first account as the distributor id.
         // Make sure there us at least one account in your Salesforce org.
         let q = "SELECT Id FROM Account LIMIT 1";
@@ -176,3 +209,4 @@ org.authenticate({ username: SF_USER_NAME, password: SF_USER_PASSWORD }, err => 
 
     }
 });
+
